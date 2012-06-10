@@ -99,7 +99,7 @@ def upload(args):
 
             log_output.append(r)
 
-    args.log = args.log or get_config('logdir') or DEFAULT_LOGDIR
+    args.log = args.logdir or get_config('logdir') or DEFAULT_LOGDIR
     if args.log:
         if os.path.exists(args.log) and os.path.isdir(args.log):
             client.csv(log_output,args.log)
@@ -118,7 +118,7 @@ def sheet(args):
 
     if os.path.exists(args.file) and os.path.isfile(args.file):
         response = client.generate(args.file)
-        args.log = args.log or get_config('logdir')
+        args.log = args.logdir or get_config('logdir') or DEFAULT_LOGDIR
         if args.log:
             if os.path.exists(args.log) and os.path.isdir(args.log):
                 client.csv(response,args.log)

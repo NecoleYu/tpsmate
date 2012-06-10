@@ -49,10 +49,10 @@ python tpsmate_cli.py config logdir "/path/to/save/csv/log/"
 python tpsmate_cli.py upload --file "/path/to/image.jpg"
 python tpsmate_cli.py upload --file "/path/to/image.jpg,/path/to/another/image.png"
 python tpsmate_cli.py upload --dir "/path/to/image/directory"
-python tpsmate_cli.py upload --dir "/path/to/image/directory" --log "/path/to/save/csv/log/"
+python tpsmate_cli.py upload --dir "/path/to/image/directory" --logdir "/path/to/save/csv/log/"
 
 python tpsmate_cli.py sheet --file "/path/to/sheet.css"
-python tpsmate_cli.py sheet --file "/path/to/sheet.css" --log "/path/to/save/csv/log/"
+python tpsmate_cli.py sheet --file "/path/to/sheet.css" --logdir "/path/to/save/csv/log/"
 
 python tpsmate_cli.py logout
 
@@ -88,7 +88,7 @@ Examples:
  python tpsmate_cli.py upload --file "/path/to/image.jpg"
  python tpsmate_cli.py upload --file "/path/to/image.jpg,/path/to/another/image.png"
  python tpsmate_cli.py upload --dir "/path/to/image/directory"
- python tpsmate_cli.py upload --dir "/path/to/image/directory" --log "/path/to/save/csv/log/"
+ python tpsmate_cli.py upload --dir "/path/to/image/directory" --logdir "/path/to/save/csv/log/"
 
 '''
 
@@ -104,7 +104,7 @@ Examples:
  python tpsmate_cli.py upload --file "/path/to/image.jpg"
  python tpsmate_cli.py upload --file "/path/to/image.jpg,/path/to/another/image.png"
  python tpsmate_cli.py upload --dir "/path/to/image/directory"
- python tpsmate_cli.py upload --dir "/path/to/image/directory" --log "/path/to/save/csv/log/"
+ python tpsmate_cli.py upload --dir "/path/to/image/directory" --logdir "/path/to/save/csv/log/"
 
 '''
 
