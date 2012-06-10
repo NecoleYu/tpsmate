@@ -3,7 +3,7 @@ TPS Mate是TPS系统的命令行/桌面版本。其中命令行版本基于pytho
 
 ##环境支持以及权限说明
 
-命令行版本支持Linux、Mac、Windows平台，在使用TPS Mate前，请确认已经安装符合对应平台的python发行版本。另外python的版本要求在2.6以上。另外你需要一个有TPS上传权限的账号。
+命令行版本支持Linux、Mac、Windows平台，在使用TPS Mate前，请确认已经安装符合对应平台的python发行版本，python的版本要求为2.x(2.6 above)。另外你需要一个有TPS上传权限的账号。
 
 ##命令总览
     python tpsmate_cli.py login "username" "password"
