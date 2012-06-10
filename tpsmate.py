@@ -2,6 +2,7 @@
 import os
 import sys
 import time
+import codecs
 import fileinput
 import re
 import json
@@ -9,9 +10,8 @@ import csv
 import urllib
 import urllib2
 import cookielib
-from bs4 import BeautifulSoup 
-from poster.encode import multipart_encode
-from poster.streaminghttp import register_openers
+import poster
+import bs4
 import tpsmate_config
 
 
@@ -32,6 +32,8 @@ class TPSMate(object):
                 self.cookiejar = cookielib.MozillaCookieJar()
 
         self.opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(self.cookiejar))
+        self.uploader = poster.streaminghttp.register_openers()
+        self.uploader.add_handler(urllib2.HTTPCookieProcessor(self.cookiejar))
 
         if not self.has_logged() and login:
             if username:
@@ -81,25 +83,20 @@ class TPSMate(object):
 
     def upload(self,photo):
         page = self.opener.open(TPS_PAGE)
-        soup = BeautifulSoup(page.read())
+        soup = bs4.BeautifulSoup(page.read())
         form = soup.find(id="J_UploadForm")
-        upload_url = form['action']
 
-        upload_data = {}
+        params =[]
         fields = form.find_all('input')
         for field in fields:
-            upload_data[field['name']] = field['value']
+            if field['name'] != 'force_opt':
+                params.append(poster.encode.MultipartParam(field['name'],field['value']))
 
-        upload_data.update({
-            'filename':os.path.basename(photo),
-            'photo':open(photo,'rb'),
-            'force_opt':'1',
-        })
+        params.append(poster.encode.MultipartParam('photo',filename=os.path.basename(photo),fileobj=open(photo,'rb')))
+        params.append(poster.encode.MultipartParam('force_opt','1'))
 
-        opener = register_openers()
-        opener.add_handler(urllib2.HTTPCookieProcessor(self.cookiejar))
-        datagen, headers = multipart_encode(upload_data)
-        request = urllib2.Request(UPLOAD_HOST + upload_url, datagen, headers)
+        datagen, headers = poster.encode.multipart_encode(params)
+        request = urllib2.Request(UPLOAD_HOST + form['action'], datagen, headers)
         upload_response = urllib2.urlopen(request)
 
         return json.loads(upload_response.read())
@@ -161,7 +158,10 @@ class TPSMate(object):
         return data
 
     def csv(self, o, path):
-        f = open(os.path.join(os.path.abspath(path),time.strftime('%Y%m%d%H%S',time.localtime(time.time())) + '.csv'),'wb')
+        prefix = 'tpsmate_'
+        path = os.path.join(os.path.abspath(path),prefix + time.strftime('%Y%m%d%H%S',time.localtime(time.time())) + '.csv')
+        f = codecs.open(path,'wb',encoding='utf-8')
+        #f = open(path,'wb')
         c = csv.writer(f)
         c.writerow(['FileName','Path','URL'])
 
@@ -170,6 +170,8 @@ class TPSMate(object):
             c.writerow([item['filename'],item['path'],url])
 
         f.close()
+
+        return path 
 
 default_encoding = tpsmate_config.get_config('encoding', sys.getfilesystemencoding())
 if default_encoding is None or default_encoding.lower() == 'ascii':
