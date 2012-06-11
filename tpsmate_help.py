@@ -47,6 +47,7 @@ python tpsmate_cli.py config encoding "utf-8,gbk"
 python tpsmate_cli.py config logdir "/path/to/save/csv/log/"
 
 python tpsmate_cli.py upload --file "/path/to/image.jpg"
+python tpsmate_cli.py upload --file "/path/to/image.jpg" --no-interactive
 python tpsmate_cli.py upload --file "/path/to/image.jpg,/path/to/another/image.png"
 python tpsmate_cli.py upload --dir "/path/to/image/directory"
 python tpsmate_cli.py upload --dir "/path/to/image/directory" --logdir "/path/to/save/csv/log/"
@@ -82,10 +83,12 @@ upload image to tps
 Options:
  --file=[file]           upload image to tps,multiple file supported.
  --dir=[directory]       upload all images in the directory.
- --log=[csv]             save the log to a csv file.
+ --logdir=[csv]          save the log to a csv file.
+ --no-interactive        NOT print upload info in the terminal
 
 Examples:
  python tpsmate_cli.py upload --file "/path/to/image.jpg"
+ python tpsmate_cli.py upload --file "/path/to/image.jpg" --no-interactive
  python tpsmate_cli.py upload --file "/path/to/image.jpg,/path/to/another/image.png"
  python tpsmate_cli.py upload --dir "/path/to/image/directory"
  python tpsmate_cli.py upload --dir "/path/to/image/directory" --logdir "/path/to/save/csv/log/"
@@ -98,7 +101,7 @@ upload image to tps
 
 Options:
  --file=[file]           the style sheet file.
- --log=[csv]             save the log to a csv file.
+ --logdir=[csv]             save the log to a csv file.
 
 Examples:
  python tpsmate_cli.py upload --file "/path/to/image.jpg"

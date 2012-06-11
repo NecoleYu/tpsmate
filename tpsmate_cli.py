@@ -65,7 +65,7 @@ def logout(args):
     client.logout()
 
 def upload(args):
-    args = parse_login_command_line(args, ['file', 'dir', 'log'], [], alias={}, default={}, help=tpsmate_help.upload)
+    args = parse_login_command_line(args, ['file', 'dir', 'log'], ['interactive'], alias={}, default={'interactive':True}, help=tpsmate_help.upload)
 
     if not args.file and not args.dir:
         raise RuntimeError('please select a image or directory')
@@ -78,10 +78,13 @@ def upload(args):
             for root,dirs,f in os.walk(args.dir):
                 for filepath in f:
                     r = {'path':os.path.join(root,filepath),'filename':os.path.basename(filepath)} 
-                    if re.match('.*\.(jpg|png|gif)',os.path.basename(filepath)):
+                    if re.match('.*\.(jpg|png|gif|jpeg)',os.path.basename(filepath)):
                         response = client.upload(os.path.join(root,filepath))
                         if response.has_key('url'):
                             r.update({'url':response['url']})
+                        else:
+                            pass
+
                     log_output.append(r)
         else:
             raise RuntimeError('the directory is not exist')
@@ -92,12 +95,18 @@ def upload(args):
 
         for f in files:
             r = {'path':os.path.abspath(f),'filename':os.path.basename(f)} 
-            if os.path.exists(f) and re.match('.*\.(jpg|png|gif)',os.path.basename(f)):
+            if os.path.exists(f) and re.match('.*\.(jpg|png|gif|jpeg)',os.path.basename(f)):
                 response = client.upload(f)
                 if response.has_key('url'):
                     r.update({'url':response['url']})
+                    print
+                else:
+                    pass
 
             log_output.append(r)
+
+    if args.interactive:
+        client.log(log_output)
 
     args.log = args.logdir or get_config('logdir') or DEFAULT_LOGDIR
     if args.log:

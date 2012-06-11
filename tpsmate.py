@@ -115,7 +115,7 @@ class TPSMate(object):
 
     def parse_css(self,sheet):
         chunk = open(sheet,'rb')
-        paths = re.finditer('url\(([a-zA-Z0-7_\-\/]+\.(jpg|png|gif))\)',chunk.read())
+        paths = re.finditer('url\(([a-zA-Z0-7_\-\/]+\.(jpg|png|gif|jpeg))\)',chunk.read())
         files = []
         store = []
 
@@ -172,6 +172,12 @@ class TPSMate(object):
         f.close()
 
         return path 
+
+    def log(self, o):
+        for item in o:
+            url = item['url'] if item.has_key('url') else ''
+            print '%s[%s] = %s' % (item['filename'],item['path'],url)
+
 
 default_encoding = tpsmate_config.get_config('encoding', sys.getfilesystemencoding())
 if default_encoding is None or default_encoding.lower() == 'ascii':
