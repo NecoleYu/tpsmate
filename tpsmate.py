@@ -92,7 +92,7 @@ class TPSMate(object):
             if field['name'] != 'force_opt':
                 params.append(poster.encode.MultipartParam(field['name'],field['value']))
 
-        params.append(poster.encode.MultipartParam('photo',filename=os.path.basename(photo),fileobj=open(photo,'rb')))
+        params.append(poster.encode.MultipartParam('photo',filename=os.path.basename(photo).decode('utf-8','ignore'),fileobj=open(photo,'rb')))
         params.append(poster.encode.MultipartParam('force_opt','1'))
 
         datagen, headers = poster.encode.multipart_encode(params)
@@ -160,8 +160,8 @@ class TPSMate(object):
     def csv(self, o, path):
         prefix = 'tpsmate_'
         path = os.path.join(os.path.abspath(path),prefix + time.strftime('%Y%m%d%H%S',time.localtime(time.time())) + '.csv')
-        f = codecs.open(path,'wb',encoding='utf-8')
-        #f = open(path,'wb')
+        #f = codecs.open(path,'wb',encoding='utf-8')
+        f = open(path,'wb')
         c = csv.writer(f)
         c.writerow(['FileName','Path','URL'])
 
@@ -176,7 +176,7 @@ class TPSMate(object):
     def log(self, o):
         for item in o:
             url = item['url'] if item.has_key('url') else ''
-            print '%s[%s] = %s' % (item['filename'],item['path'],url)
+            print '%s[%s] = %s' % (item['filename'].decode(default_encoding),item['path'].decode(default_encoding),url)
 
 
 default_encoding = tpsmate_config.get_config('encoding', sys.getfilesystemencoding())
