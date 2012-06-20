@@ -65,7 +65,7 @@ def logout(args):
     client.logout()
 
 def upload(args):
-    args = parse_login_command_line(args, ['file', 'dir', 'log'], ['interactive'], alias={}, default={'interactive':True}, help=tpsmate_help.upload)
+    args = parse_login_command_line(args, ['file', 'dir', 'logdir'], ['interactive','log'], alias={}, default={'interactive':True,'log':True}, help=tpsmate_help.upload)
 
     if not args.file and not args.dir:
         raise RuntimeError('please select a image or directory')
@@ -108,17 +108,18 @@ def upload(args):
     if args.interactive:
         client.log(log_output)
 
-    args.log = args.logdir or get_config('logdir') or DEFAULT_LOGDIR
-    if args.log:
-        if os.path.exists(args.log) and os.path.isdir(args.log):
-            client.csv(log_output,args.log)
+    args.logdir = args.logdir or get_config('logdir') or DEFAULT_LOGDIR
+    if args.log and args.logdir:
+        if os.path.exists(args.logdir) and os.path.isdir(args.logdir):
+            client.csv(log_output,args.logdir)
         else:
             raise RuntimeError('can NOT create the log file')
-
-    print 'upload finished, please check the log file'
+        print 'upload finished, please check the log file.'
+    else:
+        print 'upload finished.'
 
 def sheet(args):
-    args = parse_login_command_line(args, ['file','log'], [], alias={}, default={}, help=tpsmate_help.upload)
+    args = parse_login_command_line(args, ['file','logdir'], ['log'], alias={}, default={'log':True}, help=tpsmate_help.upload)
 
     if not args.file:
         raise RuntimeError('please select a style sheet')
@@ -127,14 +128,15 @@ def sheet(args):
 
     if os.path.exists(args.file) and os.path.isfile(args.file):
         response = client.generate(args.file)
-        args.log = args.logdir or get_config('logdir') or DEFAULT_LOGDIR
-        if args.log:
-            if os.path.exists(args.log) and os.path.isdir(args.log):
-                client.csv(response,args.log)
+        args.logdir = args.logdir or get_config('logdir') or DEFAULT_LOGDIR
+        if args.log and args.logdir:
+            if os.path.exists(args.logdir) and os.path.isdir(args.logdir):
+                client.csv(response,args.logdir)
             else:
                 raise RuntimeError('can NOT create the log file')
-
-        print 'upload successed, please check the log file'
+            print 'upload successed, please check the log file.'
+        else:
+            print 'upload successed.'
     else:
         raise RuntimeError('can NOT parse the style sheet')
 

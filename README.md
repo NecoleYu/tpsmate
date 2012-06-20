@@ -16,6 +16,8 @@ TPS Mate是TPS系统的命令行/桌面版本。其中命令行版本基于pytho
     python tpsmate_cli.py config logdir "/path/to/save/csv/log/"
 
     python tpsmate_cli.py upload --file "/path/to/image.jpg"
+    python tpsmate_cli.py upload --file "/path/to/image.jpg" --no-interactive
+    python tpsmate_cli.py upload --file "/path/to/image.jpg" --no-log
     python tpsmate_cli.py upload --file "/path/to/image.jpg,/path/to/another/image.png"
     python tpsmate_cli.py upload --dir "/path/to/image/directory"
     python tpsmate_cli.py upload --dir "/path/to/image/directory" --logdir "/path/to/save/csv/log/"
@@ -59,6 +61,10 @@ TPS Mate是TPS系统的命令行/桌面版本。其中命令行版本基于pytho
 上传单张图片且不在终端输出上传信息：
 
     python tpsmate_cli.py upload --file "/path/to/image.jpg" --no-interactive
+
+上传单张图片且不输出csv：
+
+    python tpsmate_cli.py upload --file "/path/to/image.jpg" --no-log
 
 上传多张图片：
 
