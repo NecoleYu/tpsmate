@@ -53,7 +53,9 @@ def login(args):
     else:
         print 'testing login without saving session'
 
-    TPSMate(args.username, args.password, args.cookies)
+    client = TPSMate(args.username, args.password, args.cookies)
+    if not client.has_logged():
+        print 'login FAILED,MAYBE the username and passwd is NOT correct'
 
 def logout(args):
     args = parse_command_line(args, ['cookies'], default={'cookies': DEFAULT_COOKIES}, help=tpsmate_help.logout)
@@ -100,7 +102,6 @@ def upload(args):
                 response = client.upload(f)
                 if response.has_key('url'):
                     r.update({'url':response['url']})
-                    print
                 else:
                     pass
 
@@ -115,9 +116,6 @@ def upload(args):
             client.csv(log_output,args.logdir)
         else:
             raise RuntimeError('can NOT create the log file')
-        print 'upload finished, please check the log file.'
-    else:
-        print 'upload finished.'
 
 def sheet(args):
     args = parse_login_command_line(args, ['file','logdir'], ['log'], alias={}, default={'log':True}, help=tpsmate_help.upload)
@@ -135,9 +133,6 @@ def sheet(args):
                 client.csv(response,args.logdir)
             else:
                 raise RuntimeError('can NOT create the log file')
-            print 'upload successed, please check the log file.'
-        else:
-            print 'upload successed.'
     else:
         raise RuntimeError('can NOT parse the style sheet')
 
