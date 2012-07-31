@@ -1,13 +1,13 @@
 /*简体中文注释*/
 div {
-    background:transparent url(http://img02.taobaocdn.com/tps/i2/T17QvjXe8gXXblIgEF-297-300.jpg) no-repeat scroll 0 0;
+    background:transparent url(test.jpg) no-repeat scroll 0 0;
 }
 code {
-    background-image:url(http://img02.taobaocdn.com/tps/i2/T17QvjXe8gXXblIgEF-297-300.jpg);
+    background-image:url(test.jpg);
 }
 td {
     background-image:url(http://img01.tbcdn.cn/test.jpg);
 }
 p {
-    background-image:url(http://img01.taobaocdn.com/tps/i1/T1Nd6kXb4cXXawtCLp-84-35.png);
+    background-image:url(test.png);
 }

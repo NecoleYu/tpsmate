@@ -138,7 +138,7 @@ class TPSMate(object):
         data = self.parse_css(sheet)
         self._batch(data)
 
-        for line in fileinput.FileInput(sheet, inplace=1):
+        for line in fileinput.FileInput(sheet, inplace=1, backup='.bak'):
             for enc in FILE_ENCODING:
                 try:
                     line = line.decode(enc)
