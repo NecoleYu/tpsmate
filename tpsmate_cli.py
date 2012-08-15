@@ -4,13 +4,13 @@ import re
 import os
 
 import tpsmate_help
-from tpsmate import TPSMate
-from tpsmate_config import *
+import tpsmate.core
+import tpsmate.config
 from getpass import getpass
 
 def parse_login_command_line(args, keys=[], bools=[], alias={}, default={}, help=None):
     common_keys = ['username', 'password', 'cookies']
-    common_default = {'cookies': DEFAULT_COOKIES, 'username': get_config('username'), 'password': get_config('password')}
+    common_default = {'cookies': tpsmate.config.DEFAULT_COOKIES, 'username': tpsmate.config.get_config('username'), 'password': tpsmate.config.get_config('password')}
     common_keys.extend(keys)
     common_default.update(default)
     args = parse_command_line(args, common_keys, bools, alias, common_default, help=help)
@@ -27,10 +27,10 @@ def login(args):
         args._args['cookies'] = None
 
     if len(args) < 1:
-        args.username = args.username or TPSMate(cookie_path=args.cookies, login=False).get_username() or get_config('username') or raw_input('username: ')
-        args.password = args.password or get_config('password') or getpass('password: ')
+        args.username = args.username or tpsmate.core.TPSMate(cookie_path=args.cookies, login=False).get_username() or tpsmate.config.get_config('username') or raw_input('username: ')
+        args.password = args.password or tpsmate.config.get_config('password') or getpass('password: ')
     elif len(args) == 1:
-        args.username = args.username or TPSMate(cookie_path=args.cookies, login=False).get_username() or get_config('username')
+        args.username = args.username or tpsmate.core.TPSMate(cookie_path=args.cookies, login=False).get_username() or tpsmate.config.get_config('username')
         args.password = args[0]
     if args.password == '-':
         args.password = getpass('password: ')
@@ -53,18 +53,22 @@ def login(args):
     else:
         print 'testing login without saving session'
 
+<<<<<<< HEAD
+    tpsmate.core.TPSMate(args.username, args.password, args.cookies)
+=======
     client = TPSMate(args.username, args.password, args.cookies)
     if not client.has_logged():
         print 'login FAILED,MAYBE the username and passwd is NOT correct'
+>>>>>>> 0c47f97b1b2dd43fe0ea768fdd2542298c42e921
 
 def logout(args):
-    args = parse_command_line(args, ['cookies'], default={'cookies': DEFAULT_COOKIES}, help=tpsmate_help.logout)
+    args = parse_command_line(args, ['cookies'], default={'cookies': tpsmate.config.DEFAULT_COOKIES}, help=tpsmate_help.logout)
 
     if len(args):
         raise RuntimeError('too many arguments')
 
     print 'logging out from', args.cookies
-    client = TPSMate(cookie_path=args.cookies, login=False)
+    client = tpsmate.core.TPSMate(cookie_path=args.cookies, login=False)
     client.logout()
 
 def upload(args):
@@ -73,7 +77,7 @@ def upload(args):
     if not args.file and not args.dir:
         raise RuntimeError('please select a image or directory')
 
-    client = TPSMate(args.username, args.password, args.cookies)
+    client = tpsmate.core.TPSMate(args.username, args.password, args.cookies)
     log_output = []
 
     if args.dir:
@@ -110,7 +114,7 @@ def upload(args):
     if args.interactive:
         client.log(log_output)
 
-    args.logdir = args.logdir or get_config('logdir') or DEFAULT_LOGDIR
+    args.logdir = args.logdir or tpsmate.config.get_config('logdir') or tpsmate.config.DEFAULT_LOGDIR
     if args.log and args.logdir:
         if os.path.exists(args.logdir) and os.path.isdir(args.logdir):
             client.csv(log_output,args.logdir)
@@ -123,11 +127,11 @@ def sheet(args):
     if not args.file:
         raise RuntimeError('please select a style sheet')
 
-    client = TPSMate(args.username, args.password, args.cookies)
+    client = tpsmate.core.TPSMate(args.username, args.password, args.cookies)
 
     if os.path.exists(args.file) and os.path.isfile(args.file):
         response = client.generate(args.file)
-        args.logdir = args.logdir or get_config('logdir') or DEFAULT_LOGDIR
+        args.logdir = args.logdir or tpsmate.config.get_config('logdir') or tpsmate.config.DEFAULT_LOGDIR
         if args.log and args.logdir:
             if os.path.exists(args.logdir) and os.path.isdir(args.logdir):
                 client.csv(response,args.logdir)
@@ -150,11 +154,11 @@ def config(args):
             password = getpass('password: ')
         else:
             password = args[1]
-        print 'saving password to', global_config.path
-        put_config('password', password)
+        print 'saving password to', tpsmate.config.global_config.path
+        tpsmate.config.put_config('password', password)
     else:
-        print 'saving configuration to', global_config.path
-        put_config(*args)
+        print 'saving configuration to', tpsmate.config.global_config.path
+        tpsmate.config.put_config(*args)
 
 def usage(doc=tpsmate_help.usage, message=None):
     if hasattr(doc, '__call__'):
