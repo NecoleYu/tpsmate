@@ -53,13 +53,9 @@ def login(args):
     else:
         print 'testing login without saving session'
 
-<<<<<<< HEAD
-    tpsmate.core.TPSMate(args.username, args.password, args.cookies)
-=======
-    client = TPSMate(args.username, args.password, args.cookies)
+    client = tpsmate.core.TPSMate(args.username, args.password, args.cookies)
     if not client.has_logged():
         print 'login FAILED,MAYBE the username and passwd is NOT correct'
->>>>>>> 0c47f97b1b2dd43fe0ea768fdd2542298c42e921
 
 def logout(args):
     args = parse_command_line(args, ['cookies'], default={'cookies': tpsmate.config.DEFAULT_COOKIES}, help=tpsmate_help.logout)
