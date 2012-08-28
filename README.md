@@ -82,7 +82,13 @@ TPS Mate是TPS系统的命令行/桌面版本。其中命令行版本基于pytho
 
     python tpsmate_cli.py sheet --file "/path/to/sheet.css"
 
-当前只有覆盖原文件一种方式，后续版本会做逐步改进。另外logdir参数与upload命令中的解释保持一致。
+当前只有覆盖原文件一种方式，另外logdir参数与upload命令中的解释保持一致。
+
+##上传html文件中的的背景图片并做替换：
+
+    python tpsmate_cli.py html --file "/path/to/html"
+
+当前只有覆盖原文件一种方式，另外logdir参数与upload命令中的解释保持一致。
 
 ##关于
 TPS Mate基于TPS的非官方接口，因此任何TPS官方的变动都可能导致TPS Mate短时间内不可用。当前版本未做过严格的测试，如果在使用中发现问题，可以创建ISSUE，我会尽快修复。同时你也可以通过下面的方式联系。

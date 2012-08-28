@@ -118,10 +118,10 @@ def upload(args):
             raise RuntimeError('can NOT create the log file')
 
 def sheet(args):
-    args = parse_login_command_line(args, ['file','logdir'], ['log'], alias={}, default={'log':True}, help=tpsmate_help.upload)
+    args = parse_login_command_line(args, ['file','logdir'], ['log'], alias={}, default={'log':True}, help=tpsmate_help.sheet)
 
     if not args.file:
-        raise RuntimeError('please select a style sheet')
+        raise RuntimeError('please select a style sheet or a html file')
 
     client = tpsmate.core.TPSMate(args.username, args.password, args.cookies)
 
@@ -186,7 +186,7 @@ def execute_command(args=sys.argv[1:]):
             sys.exit(1)
             sys.exit(0)
 
-    commands = {'login': login, 'logout': logout, 'upload': upload, 'sheet': sheet, 'info': info, 'config': config, 'help': help}
+    commands = {'login': login, 'logout': logout, 'upload': upload, 'sheet': sheet, 'html': sheet, 'info': info, 'config': config, 'help': help}
 
     if command not in commands:
         usage()

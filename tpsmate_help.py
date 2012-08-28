@@ -97,9 +97,9 @@ Examples:
 
 '''
 
-sheet  = '''python tpsmate_cli.py sheet [options] [file|directory]
+sheet  = '''python tpsmate_cli.py [sheet|html] [options] [file|directory]
 
-upload image to tps 
+upload images in the stylesheet or html to tps 
 
 Options:
  --file=[file]           the style sheet file.
@@ -107,12 +107,10 @@ Options:
  --no-log                NOT export log to a csv file 
 
 Examples:
- python tpsmate_cli.py upload --file "/path/to/image.jpg"
- python tpsmate_cli.py upload --file "/path/to/image.jpg" --no-interactive
- python tpsmate_cli.py upload --file "/path/to/image.jpg" --no-log
- python tpsmate_cli.py upload --file "/path/to/image.jpg,/path/to/another/image.png"
- python tpsmate_cli.py upload --dir "/path/to/image/directory"
- python tpsmate_cli.py upload --dir "/path/to/image/directory" --logdir "/path/to/save/csv/log/"
+python tpsmate_cli.py sheet --file "/path/to/sheet.css"
+python tpsmate_cli.py file --file "/path/to/html"
+python tpsmate_cli.py sheet --file "/path/to/sheet.css" --logdir "/path/to/save/csv/log/"
+python tpsmate_cli.py file --file "/path/to/html" --logdir "/path/to/save/csv/log/"
 
 '''
 

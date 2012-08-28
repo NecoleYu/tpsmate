@@ -49,17 +49,18 @@ class TPSMate(auth.Auth):
 
         return photos
 
-    def parse_css(self,sheet):
+    def parse(self,sheet):
         chunk = open(sheet,'rb')
-        paths = re.finditer('url\(([a-zA-Z0-7_\-\/]+\.(jpg|png|gif|jpeg))\)',chunk.read())
+        paths = re.finditer('url\(([a-zA-Z0-7_\-\/]+\.(jpg|png|gif|jpeg))\)|src="([a-zA-Z0-7_\-\/]+\.(jpg|png|gif|jpeg))',chunk.read())
         files = []
         store = []
 
         chunk.close()
 
         for path in paths:
-            if re.match('^http:\/\/',path.group(1)) is None:
-                files.append(path.group(1))
+            matchgroup = path.group(1) if path.group(1) else path.group(3)
+            files.append(matchgroup)
+
 
         files = list(set(files))
         for original in files:
@@ -71,7 +72,7 @@ class TPSMate(auth.Auth):
         return store
 
     def generate(self,sheet):
-        data = self.parse_css(sheet)
+        data = self.parse(sheet)
         self._batch(data)
 
         for line in fileinput.FileInput(sheet, inplace=1, backup='.bak'):
@@ -81,6 +82,7 @@ class TPSMate(auth.Auth):
                     for o in data:
                         if o.has_key('url'):
                             line = line.replace('url(' + o['original'] +')','url(' + o['url'] +')')
+                            line = line.replace('src="' + o['original'] +'"','src="' + o['url'] +'"')
                     sys.stdout.write(line.encode(enc))
 
                     break
