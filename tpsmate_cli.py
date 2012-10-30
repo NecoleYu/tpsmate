@@ -81,7 +81,7 @@ def upload(args):
             for root,dirs,f in os.walk(args.dir):
                 for filepath in f:
                     r = {'path':os.path.join(root,filepath),'filename':os.path.basename(filepath)} 
-                    if re.match('.*\.(jpg|png|gif|jpeg)',os.path.basename(filepath)):
+                    if re.match('.*\.(jpg|png|gif|jpeg)$',os.path.basename(filepath)):
                         response = client.upload(os.path.join(root,filepath))
                         if response.has_key('url'):
                             r.update({'url':response['url']})
@@ -98,7 +98,7 @@ def upload(args):
 
         for f in files:
             r = {'path':os.path.abspath(f),'filename':os.path.basename(f)} 
-            if os.path.exists(f) and re.match('.*\.(jpg|png|gif|jpeg)',os.path.basename(f)):
+            if os.path.exists(f) and re.match('.*\.(jpg|png|gif|jpeg)$',os.path.basename(f)):
                 response = client.upload(f)
                 if response.has_key('url'):
                     r.update({'url':response['url']})
