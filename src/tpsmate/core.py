@@ -17,6 +17,10 @@ UPLOAD_HOST = 'http://tps.tms.taobao.com'
 FILE_ENCODING = ('utf-8','gbk','big5')
 
 class TPSMate(auth.Auth):
+    def __init__(self,**nargs):
+        super(TPSMate,self).__init__(**nargs)
+        self.__VERSION__ = '0.2'
+
     def upload(self,photo):
         page = self.opener.open(TPS_PAGE)
         soup = bs4.BeautifulSoup(page.read())

@@ -45,17 +45,12 @@ def login(args):
     elif len(args) > 3:
         raise RuntimeError('too many arguments')
 
-    if not args.username:
-        raise RuntimeError('please input username')
-
     if args.cookies:
-        print 'saving login session to', args.cookies
+        print 'the cookies has been saved to', args.cookies
     else:
         print 'testing login without saving session'
 
-    client = tpsmate.core.TPSMate(args.username, args.password, args.cookies)
-    if not client.has_logged():
-        print 'login FAILED,MAYBE the username and passwd is NOT correct'
+    client = tpsmate.core.TPSMate(username = args.username, password = args.password, cookie_path = args.cookies, login = True)
 
 def logout(args):
     args = parse_command_line(args, ['cookies'], default={'cookies': tpsmate.config.DEFAULT_COOKIES}, help=tpsmate_help.logout)
@@ -73,7 +68,7 @@ def upload(args):
     if not args.file and not args.dir:
         raise RuntimeError('please select a image or directory')
 
-    client = tpsmate.core.TPSMate(args.username, args.password, args.cookies)
+    client = tpsmate.core.TPSMate(username = args.username, password = args.password, cookie_path = args.cookies, login = True)
     log_output = []
 
     if args.dir:
@@ -123,7 +118,7 @@ def sheet(args):
     if not args.file:
         raise RuntimeError('please select a style sheet or a html file')
 
-    client = tpsmate.core.TPSMate(args.username, args.password, args.cookies)
+    client = tpsmate.core.TPSMate(username = args.username, password = args.password, cookie_path = args.cookies, login = True)
 
     if os.path.exists(args.file) and os.path.isfile(args.file):
         response = client.generate(args.file)

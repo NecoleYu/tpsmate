@@ -11,8 +11,8 @@ def get_config_path(filename):
     user_home = os.getenv('USERPROFILE') or os.getenv('HOME')
     return os.path.join(user_home, filename)
 
-DEFAULT_CONFIG = get_config_path('.tpsmate.config')
-DEFAULT_COOKIES = get_config_path('.tpsmate.cookies')
+DEFAULT_CONFIG = get_config_path('.tms.config')
+DEFAULT_COOKIES = get_config_path('.tms.cookies')
 DEFAULT_LOGDIR = os.getenv('USERPROFILE') or os.getenv('HOME')
 
 def load_config(path):
