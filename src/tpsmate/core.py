@@ -7,41 +7,49 @@ import re
 import json
 import csv
 import urllib2
+
+import pyquery
 import poster
-import bs4
+
 import auth
 import config
+
 
 TPS_PAGE = 'http://tps.tms.taobao.com/photo/index.htm'
 UPLOAD_HOST = 'http://tps.tms.taobao.com'
 FILE_ENCODING = ('utf-8','gbk','big5')
 
-class TPSMate(auth.Auth):
+class TPSMate():
     def __init__(self,**nargs):
-        super(TPSMate,self).__init__(**nargs)
-        self.__VERSION__ = '0.2'
+        #super(TPSMate,self).__init__(**nargs)
+        inst = auth.Auth(**nargs)
+        self.opener = inst.opener
 
     def upload(self,photo):
         page = self.opener.open(TPS_PAGE)
-        soup = bs4.BeautifulSoup(page.read())
-        form = soup.find(id="J_UploadForm")
 
+        selector = pyquery.PyQuery(page.read(), parser = 'html')
+
+        form = selector('#J_UploadForm')
+        fields = form.filter('input')
         params =[]
-        fields = form.find_all('input')
-        for field in fields:
-            if field['name'] != 'force_opt':
-                params.append(poster.encode.MultipartParam(field['name'],field['value']))
 
+        def params_collection(index, node):
+            if node.attr('name') != 'force_opt':
+                params.append(poster.encode.MultipartParam(node.attr('name'), node.attr('value')))
+            else:
+                params.append(poster.encode.MultipartParam('force_opt','1'))
+
+        fields.each(params_collection)
         params.append(poster.encode.MultipartParam('photo',filename=os.path.basename(photo).decode('utf-8','ignore'),fileobj=open(photo,'rb')))
-        params.append(poster.encode.MultipartParam('force_opt','1'))
 
         datagen, headers = poster.encode.multipart_encode(params)
-        request = urllib2.Request(UPLOAD_HOST + form['action'], datagen, headers)
+        request = urllib2.Request(UPLOAD_HOST + form.attr('action'), datagen, headers)
         upload_response = urllib2.urlopen(request)
 
         return json.loads(upload_response.read())
 
-    def _batch(self,photos):
+    def batch(self, photos):
         for photo in photos:
             response = self.upload(photo['path'])
 
@@ -53,9 +61,9 @@ class TPSMate(auth.Auth):
 
         return photos
 
-    def parse(self,sheet):
-        chunk = open(sheet,'rb')
-        paths = re.finditer('url\(([a-zA-Z0-7_\-\/]+\.(jpg|png|gif|jpeg))\)|src="([a-zA-Z0-7_\-\/]+\.(jpg|png|gif|jpeg))',chunk.read())
+    def parse(self, path):
+        chunk = open(path,'rb')
+        paths = re.finditer('url\(([a-zA-Z0-7_\-\/]+\.(jpg|png|gif|jpeg))\)|src="([a-zA-Z0-7_\-\/]+\.(jpg|png|gif|jpeg))', chunk.read())
         files = []
         store = []
 
@@ -70,30 +78,30 @@ class TPSMate(auth.Auth):
         for original in files:
             store.append({
                 'original':original,
-                'path':os.path.join(os.path.dirname(sheet),original),
+                'path':os.path.join(os.path.dirname(file), original),
             })
 
         return store
 
-    def generate(self,sheet):
-        data = self.parse(sheet)
-        self._batch(data)
+    def generate(self, path, export = None):
+        data = self.batch(self.parse(path))
 
-        for line in fileinput.FileInput(sheet, inplace=1, backup='.bak'):
+        for line in fileinput.FileInput(path, inplace = 1, backup = '.bak'):
             for enc in FILE_ENCODING:
                 try:
                     line = line.decode(enc)
                     for o in data:
                         if o.has_key('url'):
-                            line = line.replace('url(' + o['original'] +')','url(' + o['url'] +')')
-                            line = line.replace('src="' + o['original'] +'"','src="' + o['url'] +'"')
-                    sys.stdout.write(line.encode(enc))
+                            line = line.replace('url(' + o['original'] +')','url(' + o['url'] +')') \
+                                    .replace('src="' + o['original'] +'"','src="' + o['url'] +'"')
 
+                    sys.stdout.write(line.encode(enc))
                     break
                 except Exception:
-                    if enc == FILE_ENCODING[-1]:
-                        sys.exit(1)
-                    continue
+                    if enc != FILE_ENCODING[-1]:
+                        continue
+
+                    sys.exit(1)
 
         fileinput.close()
 
@@ -117,12 +125,8 @@ class TPSMate(auth.Auth):
     def log(self, o):
         for item in o:
             url = item['url'] if item.has_key('url') else ''
-            print '%s[%s] = %s' % (item['filename'].decode(default_encoding),item['path'].decode(default_encoding),url)
+            print '%s[%s] = %s' % (item['filename'].decode(config.default_encoding),item['path'].decode(config.default_encoding),url)
 
-
-default_encoding = config.get_config('encoding', sys.getfilesystemencoding())
-if default_encoding is None or default_encoding.lower() == 'ascii':
-	default_encoding = 'utf-8'
 
 #def main():
     #pass

@@ -3,9 +3,11 @@ import sys
 import re
 import os
 
-import tpsmate_help
+import helps
+import tpsmate.auth
 import tpsmate.core
 import tpsmate.config
+
 from getpass import getpass
 
 def parse_login_command_line(args, keys=[], bools=[], alias={}, default={}, help=None):
@@ -22,15 +24,15 @@ def parse_login_command_line(args, keys=[], bools=[], alias={}, default={}, help
     return args
 
 def login(args):
-    args = parse_login_command_line(args, help=tpsmate_help.login)
+    args = parse_login_command_line(args, help=helps.login)
     if args.cookies == '-':
         args._args['cookies'] = None
 
     if len(args) < 1:
-        args.username = args.username or tpsmate.core.TPSMate(cookie_path=args.cookies, login=False).get_username() or tpsmate.config.get_config('username') or raw_input('username: ')
+        args.username = args.username or tpsmate.auth.Auth(cookie_path=args.cookies, login=False).get_username() or tpsmate.config.get_config('username') or raw_input('username: ')
         args.password = args.password or tpsmate.config.get_config('password') or getpass('password: ')
     elif len(args) == 1:
-        args.username = args.username or tpsmate.core.TPSMate(cookie_path=args.cookies, login=False).get_username() or tpsmate.config.get_config('username')
+        args.username = args.username or tpsmate.auth.Auth(cookie_path=args.cookies, login=False).get_username() or tpsmate.config.get_config('username')
         args.password = args[0]
     if args.password == '-':
         args.password = getpass('password: ')
@@ -50,20 +52,20 @@ def login(args):
     else:
         print 'testing login without saving session'
 
-    client = tpsmate.core.TPSMate(username = args.username, password = args.password, cookie_path = args.cookies, login = True)
+    tpsmate.auth.Auth(username = args.username, password = args.password, cookie_path = args.cookies, login = True)
 
 def logout(args):
-    args = parse_command_line(args, ['cookies'], default={'cookies': tpsmate.config.DEFAULT_COOKIES}, help=tpsmate_help.logout)
+    args = parse_command_line(args, ['cookies'], default={'cookies': tpsmate.config.DEFAULT_COOKIES}, help=helps.logout)
 
     if len(args):
         raise RuntimeError('too many arguments')
 
     print 'logging out from', args.cookies
-    client = tpsmate.core.TPSMate(cookie_path=args.cookies, login=False)
+    client = tpsmate.auth.Auth(cookie_path=args.cookies, login = False)
     client.logout()
 
 def upload(args):
-    args = parse_login_command_line(args, ['file', 'dir', 'logdir'], ['interactive','log'], alias={}, default={'interactive':True,'log':True}, help=tpsmate_help.upload)
+    args = parse_login_command_line(args, ['file', 'dir', 'logdir'], ['interactive','log'], alias={}, default={'interactive':True,'log':True}, help=helps.upload)
 
     if not args.file and not args.dir:
         raise RuntimeError('please select a image or directory')
@@ -113,7 +115,7 @@ def upload(args):
             raise RuntimeError('can NOT create the log file')
 
 def sheet(args):
-    args = parse_login_command_line(args, ['file','logdir'], ['log'], alias={}, default={'log':True}, help=tpsmate_help.sheet)
+    args = parse_login_command_line(args, ['file','logdir'], ['log'], alias={}, default={'log':True}, help=helps.sheet)
 
     if not args.file:
         raise RuntimeError('please select a style sheet or a html file')
@@ -135,7 +137,7 @@ def info(args):
     pass
 
 def config(args):
-    args = parse_command_line(args, [], [], help=tpsmate_help.config)
+    args = parse_command_line(args, [], [], help=helps.config)
 
     if len(args) < 1:
         raise RuntimeError('no arguments')
@@ -151,7 +153,7 @@ def config(args):
         print 'saving configuration to', tpsmate.config.global_config.path
         tpsmate.config.put_config(*args)
 
-def usage(doc=tpsmate_help.usage, message=None):
+def usage(doc=helps.usage, message=None):
     if hasattr(doc, '__call__'):
         doc = doc()
     if message:
@@ -160,12 +162,12 @@ def usage(doc=tpsmate_help.usage, message=None):
 
 def help(args):
     if len(args) == 1:
-        helper = getattr(tpsmate_help, args[0].lower(), tpsmate_help.help)
+        helper = getattr(helps, args[0].lower(), helps.help)
         usage(helper)
     elif len(args) == 0:
-        print tpsmate_help.welcome
+        print helps.welcome
     else:
-        print tpsmate_help.help
+        print helps.help
 
 def execute_command(args=sys.argv[1:]):
     if not args:

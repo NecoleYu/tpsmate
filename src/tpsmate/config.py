@@ -5,9 +5,11 @@ import sys
 def get_config_path(filename):
     if os.path.exists(filename):
         return filename
+
     local_path = os.path.join(sys.path[0], filename)
     if os.path.exists(local_path):
         return local_path
+
     user_home = os.getenv('USERPROFILE') or os.getenv('HOME')
     return os.path.join(user_home, filename)
 
@@ -82,3 +84,7 @@ def delete_config(k):
 
 def source_config():
 	return global_config.source()
+
+default_encoding = get_config('encoding', sys.getfilesystemencoding())
+if default_encoding is None or default_encoding.lower() == 'ascii':
+	default_encoding = 'utf-8'

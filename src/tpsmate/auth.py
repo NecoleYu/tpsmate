@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 import os
-import sys
 import urllib
 import urllib2
 import cookielib
+
 import poster
 import config
 
@@ -38,11 +38,9 @@ class Auth(object):
 
     def login(self, username, password):
         if username:
-            username = username.decode(default_encoding).encode('utf-8')
+            username = username.decode(config.default_encoding).encode('utf-8')
         else:
             username = self.get_username() if self.has_cookie('.taobao.com', 'tracknick') else config.get_config('username')
-
-        print username
 
         if not username:
             raise AuthError('REQUIRED','username is REQUIRED!')
@@ -83,7 +81,3 @@ class Auth(object):
 
     def get_username(self):
         return self.get_cookie('.taobao.com', 'tracknick')
-
-default_encoding = config.get_config('encoding', sys.getfilesystemencoding())
-if default_encoding is None or default_encoding.lower() == 'ascii':
-	default_encoding = 'utf-8'
