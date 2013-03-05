@@ -43,9 +43,9 @@ class Auth(object):
             username = self.get_username() if self.has_cookie('.taobao.com', 'tracknick') else config.get_config('username')
 
         if not username:
-            raise AuthError('REQUIRED','username is REQUIRED!')
+            raise AuthError('REQUIRED','Error: username is REQUIRED!')
         if not password:
-            raise AuthError('REQUIRED','password is REQUIRED!')
+            raise AuthError('REQUIRED','Error: password is REQUIRED!')
 
         login_data = urllib.urlencode({
             'TPL_username':username.decode('utf-8').encode('gbk'),
@@ -55,7 +55,7 @@ class Auth(object):
         self.save_cookies()
 
         if not self.has_logged():
-            raise AuthError('FAILED','login FAILED,MAYBE the username or password is NOT correct!')
+            raise AuthError('FAILED','Error: login FAILED,MAYBE the username or password is NOT correct!')
 
     def logout(self):
         if self.cookie_path:
