@@ -73,6 +73,10 @@ TPS Mate是TPS系统的命令行版本。其中命令行版本基于python，当
 
     tpsmate upload "/path/to/image.jpg"
 
+未登陆状态下上传单张图片：
+
+    tpsmate upload "/path/to/image.jpg" --username "username" --password "password"
+
 上传单张图片且不在终端输出上传信息：
 
     tpsmate upload "/path/to/image.jpg" --no-interactive
