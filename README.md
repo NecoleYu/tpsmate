@@ -10,7 +10,7 @@ TPS Mate是TPS系统的命令行版本。其中命令行版本基于python，当
     tpsmate upload "/path/to/image.jpg"
     tpsmate upload "/path/to/image.jpg" --no-interactive
     tpsmate upload "/path/to/image.jpg" --no-log
-    tpsmate upload "/path/to/image.jpg,/path/to/another/image.png"
+    tpsmate upload "/path/to/image.jpg" "/path/to/another/image.png"
 
     tpsmate upload "/path/to/image/directory"
     tpsmate upload "/path/to/image/directory" --logdir "/path/to/save/csv/log/"
