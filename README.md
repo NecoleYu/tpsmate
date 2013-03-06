@@ -116,6 +116,15 @@ logdir参数与upload命令中的解释保持一致。
 
     tpsmate upload "/path/to/html" --export "/path/to/another/html"
 
+##通配符支持
+
+    tpsmate upload "/path/*.png"
+
+##混合上传方式
+
+    tpsmate upload "/path/to/image" "/path/to/image/directory" "path/to/sheet.css"
+
+在不清楚你做什么之前，强烈不建议你这么做
 
 ##关于
 TPS Mate基于TPS的非官方接口，因此任何TPS官方的变动都可能导致TPS Mate短时间内不可用。当前版本未做过严格的测试，如果在使用中发现问题，可以创建ISSUE，我会尽快修复。同时你也可以通过下面的方式联系。
