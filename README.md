@@ -41,6 +41,10 @@ TPS Mate是TPS系统的命令行版本。其中命令行版本基于python，当
 
     tpsmate login
 
+或者：
+
+    tpsmate login --username "username" --password "password"
+
 或直接执行upload命令，第一次上传文件时会进行登陆验证。
 
     tpsmate upload "/path/to/file" 
