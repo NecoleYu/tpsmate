@@ -1,4 +1,3 @@
-/*简体中文注释*/
 div {
     background:transparent url(test.jpg) no-repeat scroll 0 0;
 }
@@ -11,3 +10,4 @@ td {
 p {
     background-image:url(test.png);
 }
+/*简体中文注释*/

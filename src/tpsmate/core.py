@@ -7,6 +7,7 @@ import re
 import json
 import csv
 import urllib2
+import codecs
 
 import pyquery
 import poster
@@ -69,41 +70,64 @@ class TPSMate():
 
         chunk.close()
 
-        for path in paths:
-            matchgroup = path.group(1) if path.group(1) else path.group(3)
+        for p in paths:
+            matchgroup = p.group(1) if p.group(1) else p.group(3)
             files.append(matchgroup)
 
 
         files = list(set(files))
+
         for original in files:
             store.append({
                 'original':original,
-                'path':os.path.join(os.path.dirname(file), original),
+                'path':os.path.join(os.path.dirname(path), original),
             })
 
         return store
 
-    def generate(self, path, export = None):
+    def generate(self, path, export, inplace):
         data = self.batch(self.parse(path))
+        inplace = 1 if inplace else 0
+        lines = []
 
-        for line in fileinput.FileInput(path, inplace = 1, backup = '.bak'):
-            for enc in FILE_ENCODING:
+        original = fileinput.FileInput(path, inplace = inplace)
+        fenc = FILE_ENCODING[0]
+
+        for line in original:
+            for idx, enc in enumerate(FILE_ENCODING):
                 try:
                     line = line.decode(enc)
+
                     for o in data:
                         if o.has_key('url'):
                             line = line.replace('url(' + o['original'] +')','url(' + o['url'] +')') \
                                     .replace('src="' + o['original'] +'"','src="' + o['url'] +'"')
 
+
+                    lines.append(line)
                     sys.stdout.write(line.encode(enc))
                     break
                 except Exception:
                     if enc != FILE_ENCODING[-1]:
+                        fenc = FILE_ENCODING[idx+1]
                         continue
+                    else:
+                        fenc = FILE_ENCODING[0] 
 
                     sys.exit(1)
 
         fileinput.close()
+
+        if export is not None:
+            try:
+                print lines
+                target = codecs.open(export, 'wb', fenc) 
+                for line in lines:
+                    target.write(line)
+
+                target.close()
+            except Exception, e:
+                print e
 
         return data
 
@@ -126,9 +150,3 @@ class TPSMate():
         for item in o:
             url = item['url'] if item.has_key('url') else ''
             print '%s[%s] = %s' % (item['filename'].decode(config.default_encoding),item['path'].decode(config.default_encoding),url)
-
-
-#def main():
-    #pass
-#if __name__ == '__main__':
-    #main()
