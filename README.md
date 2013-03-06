@@ -32,7 +32,7 @@ TPS Mate是TPS系统的命令行版本。其中命令行版本基于python，当
 
     tpsmate login --username "username" --password "password"
 
-    python tpsmate_cli.py logout
+    tpsmate logout
 
 ##登陆
 无论你通过login命令登陆还是在upload中以参数形式传入，cookie会保存在你的用户目录下，以便进行上传等操作。通常情况下，建议你使用config命令对账户和密码进行配置。config命令的使用可以参考“配置”章节。
