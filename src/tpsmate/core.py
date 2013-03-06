@@ -8,6 +8,7 @@ import json
 import csv
 import urllib2
 import codecs
+import base64
 
 import pyquery
 import poster
@@ -16,8 +17,8 @@ import auth
 import config
 
 
-TPS_PAGE = 'http://tps.tms.taobao.com/photo/index.htm'
-UPLOAD_HOST = 'http://tps.tms.taobao.com'
+TPS_PAGE = base64.decodestring('aHR0cDovL3Rwcy50bXMudGFvYmFvLmNvbS9waG90by9pbmRleC5odG0=\n')
+UPLOAD_HOST = base64.decodestring('aHR0cDovL3Rwcy50bXMudGFvYmFvLmNvbQ==\n')
 FILE_ENCODING = ('utf-8','gbk','big5')
 
 class TPSMate():

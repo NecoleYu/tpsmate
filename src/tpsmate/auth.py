@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import base64
 import os
 import urllib
 import urllib2
@@ -7,7 +8,7 @@ import cookielib
 import poster
 import config
 
-LOGIN_PAGE = 'http://login.taobao.com/member/login.jhtml'
+LOGIN_PAGE = base64.decodestring('aHR0cDovL2xvZ2luLnRhb2Jhby5jb20vbWVtYmVyL2xvZ2luLmpodG1s\n')
 
 class AuthError(NotImplementedError):
     def __init__(self,error,message):
