@@ -33,6 +33,9 @@ TPS Mate是TPS系统的命令行版本。其中命令行版本基于python，当
 
     python tpsmate_cli.py logout
 
+##安装
+下载build目录下对应的二进制文件即可，如果无对应平台的可执行文件，参考(这里)[https://github.com/sodabiscuit/tpsmate/tree/master/build]
+
 ##登陆
 无论你通过login命令登陆还是在upload中以参数形式传入，cookie会保存在你的用户目录下，以便进行上传等操作。通常情况下，建议你使用config命令对账户和密码进行配置。config命令的使用可以参考“配置”章节。
 
