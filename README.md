@@ -108,7 +108,7 @@ TPS Mate是TPS系统的命令行版本。其中命令行版本基于python，当
 
 logdir参数与upload命令中的解释保持一致。
 
-##上传html中的内联样式背景图片或者src属性，导出或现实替换后的文件：
+##上传html中的内联样式背景图片或者src属性，导出或显示替换后的文件：
 上传html中的内联样式背景图片或者src属性，只在终端显示：
 
     tpsmate upload "/path/to/html"
