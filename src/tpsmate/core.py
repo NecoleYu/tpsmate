@@ -65,7 +65,7 @@ class TPSMate():
 
     def parse(self, path):
         chunk = open(path,'rb')
-        paths = re.finditer('url\(([a-zA-Z0-7_\-\/]+\.(jpg|png|gif|jpeg))\)|src="([a-zA-Z0-7_\-\/]+\.(jpg|png|gif|jpeg))', chunk.read())
+        paths = re.finditer('url\("?([a-zA-Z0-7_\-\/\.]+\.(jpg|png|gif|jpeg))"?\)|src="([a-zA-Z0-7_\-\/\.]+\.(jpg|png|gif|jpeg))', chunk.read())
         files = []
         store = []
 
@@ -81,7 +81,7 @@ class TPSMate():
         for original in files:
             store.append({
                 'original':original,
-                'path':os.path.join(os.path.dirname(path), original),
+                'path':os.path.join(os.path.abspath(os.path.dirname(path)), original),
             })
 
         return store
@@ -101,8 +101,9 @@ class TPSMate():
 
                     for o in data:
                         if o.has_key('url'):
-                            line = line.replace('url(' + o['original'] +')','url(' + o['url'] +')') \
-                                    .replace('src="' + o['original'] +'"','src="' + o['url'] +'"')
+                            b = re.compile('url\("?' + o['original'] +'"?\)')
+                            s = re.compile('src="' + o['original'] +'"')
+                            line = re.sub(s, 'src="' + o['url'] +'"', re.sub(b,'url(' + o['url'] +')' , line))
 
 
                     lines.append(line)
@@ -121,7 +122,6 @@ class TPSMate():
 
         if export is not None:
             try:
-                print lines
                 target = codecs.open(export, 'wb', fenc) 
                 for line in lines:
                     target.write(line)

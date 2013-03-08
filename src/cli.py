@@ -36,6 +36,7 @@ def upload(args):
     sources = args.sources 
     export = args.export
     inplace = args.inplace
+    force = args.force
 
     if not is_authorized:
         return
@@ -46,17 +47,17 @@ def upload(args):
     for source in sources:
         if os.path.exists(source):
             if os.path.isfile(source):
-                log = upload_skel(client = client, source = source, export = export, inplace = inplace)
+                log = upload_skel(client = client, source = source, export = export, inplace = inplace, force = force)
                 log_output = log_output + log
             elif os.path.isdir(source):
                 for root,dirs,f in os.walk(source):
                     for filepath in f:
-                        log = upload_skel(client = client, source = os.path.join(root, filepath), export = None, inplace = inplace)
+                        log = upload_skel(client = client, source = os.path.join(root, filepath), export = None, inplace = inplace, force = force)
                         log_output = log_output + log
             else:
                 globs = glob.glob(source)
                 for filepath in globs:
-                    log = upload_skel(client = client, source = os.path.join(root, filepath), export = None, inplace = inplace)
+                    log = upload_skel(client = client, source = os.path.join(root, filepath), export = None, inplace = inplace, force = force)
                     log_output = log_output + log
 
     if not args.no_interactive:
@@ -67,7 +68,7 @@ def upload(args):
     if not args.no_log and logdir and os.path.exists(logdir) and os.path.isdir(logdir):
         client.csv(log_output, logdir)
 
-def upload_skel(client, source, export, inplace):
+def upload_skel(client, source, export, inplace, force):
     r = []
 
     if re.match('.*\.(jpg|png|gif|jpeg)$',os.path.basename(source)):
@@ -76,7 +77,7 @@ def upload_skel(client, source, export, inplace):
         if response.has_key('url'):
             ret.update({'url':response['url']})
         r.append(ret)
-    elif re.match('.*\.(css|less|sass|scss|styl|html)$', os.path.basename(source)):
+    elif force or re.match('.*\.(css|less|sass|scss|styl|html|htm)$', os.path.basename(source)):
         r = client.generate(source, export, inplace)
 
     return r
@@ -111,6 +112,7 @@ def execute():
     upload_parser.add_argument('--inplace', action = 'store_true', help = 'parse and replace it')
     upload_parser.add_argument('--no-interactive', action = 'store_true', help = 'don\'t print the upload log to terminal')
     upload_parser.add_argument('--no-log', action = 'store_true', help = 'don\'t save the upload log to the csv file')
+    upload_parser.add_argument('--force', action = 'store_true', help = 'ignore the suffix name')
     upload_parser.add_argument('--logdir', type = str, help = 'the path stored the csv log')
     upload_parser.set_defaults(func = upload)
 

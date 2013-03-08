@@ -125,6 +125,11 @@ logdir参数与upload命令中的解释保持一致。
 
     tpsmate upload "/path/to/html" --export "/path/to/another/html"
 
+##强制上传任意文件中的内联样式背景图片或者src属性，导出或显示替换后的文件：
+
+    tpsmate upload "/path/to/file" --force
+
+
 ##通配符支持
 
     tpsmate upload "/path/*.png"
