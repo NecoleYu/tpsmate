@@ -65,7 +65,7 @@ class TPSMate():
 
     def parse(self, path):
         chunk = open(path,'rb')
-        paths = re.finditer('url\("?([a-zA-Z0-7_\-\/\.]+\.(jpg|png|gif|jpeg))"?\)|src="([a-zA-Z0-7_\-\/\.]+\.(jpg|png|gif|jpeg))', chunk.read())
+        paths = re.finditer(r'url\("?([a-zA-Z0-9_\-\/\.]+\.(jpg|png|gif|jpeg))"?\)|src="([a-zA-Z0-9_\-\/\.]+\.(jpg|png|gif|jpeg))"', chunk.read())
         files = []
         store = []
 
