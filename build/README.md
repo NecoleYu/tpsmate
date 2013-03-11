@@ -1,7 +1,7 @@
 ##可执行文件##
 
 * tpsmate_i386 (编译环境为Ubuntu Server 12.04 LTS)
-* tpsmate_x86_64 (编译环境为Arch Linux x64_64)
+* tpsmate_x86_64 (编译环境为Arch Linux x86_64)
 * tpsmate.exe (编译环境为Windows 7 32bit)
 
 ##python执行环境##
