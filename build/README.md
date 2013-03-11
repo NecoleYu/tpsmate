@@ -1,8 +1,8 @@
 ##可执行文件##
 
-* tpsmate //linux 可执行文件(archlinux 64bit)
-* tpsmate.exe //windows 可执行文件(windows 7)
-* mac 下可执行文件暂缺，参考python环境部分
+* tpsmate_i386 (编译环境为Ubuntu Server 12.04 LTS)
+* tpsmate_x86_64 (编译环境为Arch Linux x64_64)
+* tpsmate.exe (编译环境为Windows 7 32bit)
 
 ##python执行环境##
 Mac和大部分的*nix发行版默认安装python，在使用前确认安装版本最低要求为2.6，且安装python包管理工具pip。
