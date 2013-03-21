@@ -8,7 +8,7 @@ import cookielib
 import poster
 import config
 
-LOGIN_PAGE = base64.decodestring('aHR0cDovL2xvZ2luLnRhb2Jhby5jb20vbWVtYmVyL2xvZ2luLmpodG1s\n')
+LOGIN_PAGE = base64.decodestring('aHR0cHM6Ly9sb2dpbi50YW9iYW8uY29tL21lbWJlci9sb2dpbi5qaHRtbA==\n')
 
 class AuthError(NotImplementedError):
     def __init__(self,error,message):
@@ -52,6 +52,7 @@ class Auth(object):
             'TPL_username':username.decode('utf-8').encode('gbk'),
             'TPL_password':password,
         })
+
         self.opener.open(LOGIN_PAGE, login_data)
         self.save_cookies()
 
